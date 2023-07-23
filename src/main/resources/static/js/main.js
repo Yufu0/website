@@ -10,28 +10,62 @@ var connectingElement = document.querySelector('.connecting');
 
 var stompClient = null;
 var username = null;
-var colors = ['red', 'blue', 'green', 'purple', 'orange', 'pink', 'black', 'brown', 'yellow', 'gray', 'cyan', 'magenta', 'lime', 'olive', 'navy', 'teal', 'maroon', 'silver', 'white'];
 
+var colors = [
+    '#2196F3', '#32c787', '#00BCD4', '#ff5652',
+    '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
+];
 
 function connect(event) {
     username = document.querySelector('#name').value.trim();
-    if (username) {
+
+    if(username) {
         usernamePage.classList.add('hidden');
         chatPage.classList.remove('hidden');
 
-        var socket = new SocketJS('ws')
+        var socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
 
-        stompClient.connect({}, onConnect, onError);
+        stompClient.connect({}, onConnected, onError);
     }
     event.preventDefault();
 }
 
-function onConnect() {
+
+function onConnected() {
+    // Subscribe to the Public Topic
     stompClient.subscribe('/topic/public', onMessageReceived);
-    stompClient.send("/app/chat.addUser", {}, JSON.stringify({sender: username, type: 'JOIN'}))
+
+    // Tell your username to the server
+    stompClient.send("/app/chat.addUser",
+        {},
+        JSON.stringify({sender: username, type: 'JOIN'})
+    )
+
     connectingElement.classList.add('hidden');
 }
+
+
+function onError(error) {
+    connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
+    connectingElement.style.color = 'red';
+}
+
+
+function sendMessage(event) {
+    var messageContent = messageInput.value.trim();
+    if(messageContent && stompClient) {
+        var chatMessage = {
+            sender: username,
+            content: messageInput.value,
+            type: 'CHAT'
+        };
+        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+        messageInput.value = '';
+    }
+    event.preventDefault();
+}
+
 
 function onMessageReceived(payload) {
     var message = JSON.parse(payload.body);
@@ -70,28 +104,15 @@ function onMessageReceived(payload) {
     messageArea.scrollTop = messageArea.scrollHeight;
 }
 
-function onError(error) {
-    connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
-    connectingElement.style.color = 'red';
-}
 
-function sendMessage(event) {
-    var messageContent = messageInput.value.trim();
-    if (messageContent && stompClient){
-        var chatMessage = {
-            sender: username,
-            content: messageContent,
-            type: 'CHAT'
-        };
-        stompClient.send(
-            '/app/chat.sendMessage',
-            {},
-            JSON.stringify(chatMessage)
-        );
-        messageInput.value = '';
+function getAvatarColor(messageSender) {
+    var hash = 0;
+    for (var i = 0; i < messageSender.length; i++) {
+        hash = 31 * hash + messageSender.charCodeAt(i);
     }
+    var index = Math.abs(hash % colors.length);
+    return colors[index];
 }
 
 usernameForm.addEventListener('submit', connect, true)
 messageForm.addEventListener('submit', sendMessage, true)
-
