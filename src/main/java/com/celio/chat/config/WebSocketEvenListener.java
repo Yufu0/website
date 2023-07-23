@@ -24,7 +24,7 @@ public class WebSocketEvenListener {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String username = (String) headerAccessor.getSessionAttributes().get("username");
         if (username != null) {
-            log.info("User Disconnected: " + username);
+            log.info("User disconnected: " + username);
             ChatMessage chatMessage = ChatMessage.builder()
                     .type(MessageType.LEAVE)
                     .sender(username)
