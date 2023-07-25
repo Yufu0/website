@@ -1,4 +1,4 @@
-package com.celio.chat.chat;
+package com.celio.chat.message;
 
 import lombok.*;
 
@@ -7,8 +7,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ChatMessage {
-    private String content;
+public class Message {
     private String sender;
+    private String content;
     private MessageType type;
 }

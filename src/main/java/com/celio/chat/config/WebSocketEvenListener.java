@@ -1,7 +1,7 @@
 package com.celio.chat.config;
 
-import com.celio.chat.chat.ChatMessage;
-import com.celio.chat.chat.MessageType;
+import com.celio.chat.message.Message;
+import com.celio.chat.message.MessageType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -25,11 +25,11 @@ public class WebSocketEvenListener {
         String username = (String) headerAccessor.getSessionAttributes().get("username");
         if (username != null) {
             log.info("User disconnected: " + username);
-            ChatMessage chatMessage = ChatMessage.builder()
+            Message message = Message.builder()
                     .type(MessageType.LEAVE)
                     .sender(username)
                     .build();
-            messagingTemplate.convertAndSend("/topic/public", chatMessage);
+            messagingTemplate.convertAndSend("/topic/public", message);
 
         }
     }
