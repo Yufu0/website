@@ -1,13 +1,25 @@
 package com.celio.chat.snake.game;
-
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 @Component
 public class Map {
-    private int width = 1280;
-    private int height = 720;
+    private static final Map instance = new Map();
+
+    public Map() {
+        for (int i = 0; i < 100; i++) {
+            generateBall();
+        }
+    }
+
+    public static Map getInstance() {
+        return instance;
+    }
+    private int width = 500;
+    private int height = 500;
 
     private List<Player> players = new ArrayList<>();
     private List<Ball> balls = new ArrayList<>();
@@ -18,7 +30,20 @@ public class Map {
     }
 
     public void generateBall() {
-        balls.add(new Ball(new Coord(0, 0), 1));
+        balls.add(new Ball(
+                new Coord(
+                        Math.random() * width,
+                        Math.random() * height
+                ),
+                1 + (int) (Math.random() * 10)
+        ));
+    }
+
+    public Coord randomCoord() {
+        return new Coord(
+                100 + Math.random() * (width-100),
+                100 + Math.random() * (height-100)
+        );
     }
 
     public void update() {
@@ -35,26 +60,36 @@ public class Map {
         }
     }
 
-    public String jsonMap() {
-        String json = "{\"width\": " + width + ", \"height\": " + height + ", \"players\": [";
-        if (players.size() > 0) {
-            for (Player player : players) {
-                json += "{\"name\": \"" + player.getName() + "\", \"score\": " + player.getScore() + ", \"head\": {\"x\": " + player.getHead().getX() + ", \"y\": " + player.getHead().getY() + "}, \"direction\": {\"x\": " + player.getDirection().getX() + ", \"y\": " + player.getDirection().getY() + "}, \"body\": [";
-                for (Coord coord : player.getBody()) {
-                    json += "{\"x\": " + coord.getX() + ", \"y\": " + coord.getY() + "},";
-                }
-                json = json.substring(0, json.length() - 1);
-                json += "]}";
-            }
+    public JSONObject json() {
+        JSONObject json = new JSONObject();
+        json.put("width", width);
+        json.put("height", height);
+
+        JSONArray jsonPlayers = new JSONArray();
+        for (Player player : players) {
+            jsonPlayers.add(player.json());
         }
-        json += "], \"balls\": [";
-        if (balls.size() > 0) {
-            for (Ball ball : balls) {
-                json += "{\"coord\": {\"x\": " + ball.getCoord().getX() + ", \"y\": " + ball.getCoord().getY() + "}, \"points\": " + ball.getPoints() + "},";
-            }
-            json = json.substring(0, json.length() - 1);
+        json.put("players", jsonPlayers);
+        JSONArray jsonBalls = new JSONArray();
+        for (Ball ball : balls) {
+            jsonBalls.add(ball.json());
         }
-        json += "]}";
+        json.put("balls", jsonBalls);
+
         return json;
+    }
+
+    public void deletePlayer(String username) {
+        players.removeIf(player -> player.getName().equals(username));
+    }
+
+    public void changePlayer(String name, Coord direction, Coord head, List<Coord> body) {
+        for (Player player : players) {
+            if (player.getName().equals(name)) {
+                player.setDirection(direction);
+                player.setHead(head);
+                player.setBody(body);
+            }
+        }
     }
 }

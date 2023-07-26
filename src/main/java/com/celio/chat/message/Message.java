@@ -1,7 +1,6 @@
 package com.celio.chat.message;
 
 import lombok.*;
-
 @Getter
 @Setter
 @AllArgsConstructor

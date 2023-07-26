@@ -5,4 +5,5 @@ public enum MessageType {
     JOIN,
     LEAVE,
     DIRECTION,
+    UPDATE,
 }

@@ -2,6 +2,7 @@ package com.celio.chat.config;
 
 import com.celio.chat.message.Message;
 import com.celio.chat.message.MessageType;
+import com.celio.chat.snake.game.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -15,6 +16,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 @Slf4j
 public class WebSocketEvenListener {
 
+
     private final SimpMessageSendingOperations messagingTemplate;
 
     @EventListener
@@ -25,11 +27,12 @@ public class WebSocketEvenListener {
         String username = (String) headerAccessor.getSessionAttributes().get("username");
         if (username != null) {
             log.info("User disconnected: " + username);
+            Map.getInstance().deletePlayer(username);
             Message message = Message.builder()
                     .type(MessageType.LEAVE)
                     .sender(username)
                     .build();
-            messagingTemplate.convertAndSend("/topic/public", message);
+            messagingTemplate.convertAndSend("/snake/public", message);
 
         }
     }

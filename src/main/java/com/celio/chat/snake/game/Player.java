@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.util.List;
 
@@ -18,6 +20,14 @@ public class Player {
     private Coord head;
     private Coord direction;
     private List<Coord> body;
+
+    public Player(String name, Map map) {
+        this.name = name;
+        this.score = 1;
+        this.head = map.randomCoord();
+        this.direction = new Coord(0, 0);
+        this.body = List.of(head);
+    }
 
     public void move() {
         body.add(0, head);
@@ -38,5 +48,19 @@ public class Player {
         } else {
             body.remove(body.size() - 1);
         }
+    }
+
+    public JSONObject json() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("score", score);
+        json.put("head", head.json());
+        json.put("direction", direction.json());
+        JSONArray jsonBody = new JSONArray();
+        for (Coord coord : body) {
+            jsonBody.add(coord.json());
+        }
+        json.put("body", jsonBody);
+        return json;
     }
 }
