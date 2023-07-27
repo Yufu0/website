@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 public class ChatController {
 
     @MessageMapping("/chat.sendMessage")
-    @SendTo("/topic/public")
+    @SendTo("/chat/public")
     public Message sendMessage(
             @Payload Message message
     ) {
@@ -19,7 +19,7 @@ public class ChatController {
     }
 
     @MessageMapping("/chat.addUser")
-    @SendTo("/topic/public")
+    @SendTo("/chat/public")
     public Message addUser(
             @Payload Message message,
             SimpMessageHeaderAccessor headerAccessor
