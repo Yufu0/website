@@ -1,10 +1,11 @@
-package com.celio.chat.snake;
+package com.celio.app.snake;
 
-import com.celio.chat.message.Message;
-import com.celio.chat.message.MessageType;
-import com.celio.chat.snake.game.Coord;
-import com.celio.chat.snake.game.Map;
-import com.celio.chat.snake.game.Player;
+import com.celio.app.message.Message;
+import com.celio.app.message.MessageType;
+import com.celio.app.snake.game.Ball;
+import com.celio.app.snake.game.Coord;
+import com.celio.app.snake.game.Map;
+import com.celio.app.snake.game.Player;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -27,12 +28,12 @@ public class SnakeController {
         return "snake";
     }
 
-    @MessageMapping("/snake.changeDirection")
+    @MessageMapping("/snake.changePosition")
     @SendTo("/snake/public")
-    public Message changeDirection(
-            Message message
+    public Message changePosition(
+            @Payload Message message
     ) {
-
+        /*
         // change direction of player
         JSONParser jsonParser = new JSONParser();
         try {
@@ -62,7 +63,7 @@ public class SnakeController {
             );
         } catch (ParseException e) {
             e.printStackTrace();
-        }
+        }*/
         return message;
     }
 
@@ -77,8 +78,7 @@ public class SnakeController {
         // add player to map
         Map map = Map.getInstance();
         map.addPlayer(new Player(message.getSender(), map));
-        System.out.println("add player: " + message.getSender());
-        System.out.println(map.json());
+
 
         return new Message(
                 message.getSender(),

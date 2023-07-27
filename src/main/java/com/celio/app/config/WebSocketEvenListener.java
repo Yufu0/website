@@ -1,8 +1,8 @@
-package com.celio.chat.config;
+package com.celio.app.config;
 
-import com.celio.chat.message.Message;
-import com.celio.chat.message.MessageType;
-import com.celio.chat.snake.game.Map;
+import com.celio.app.message.Message;
+import com.celio.app.message.MessageType;
+import com.celio.app.snake.game.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

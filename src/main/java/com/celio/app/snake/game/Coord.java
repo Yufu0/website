@@ -1,4 +1,4 @@
-package com.celio.chat.snake.game;
+package com.celio.app.snake.game;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

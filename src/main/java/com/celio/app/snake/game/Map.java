@@ -1,4 +1,5 @@
-package com.celio.chat.snake.game;
+package com.celio.app.snake.game;
+import lombok.Getter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
@@ -6,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 @Component
+@Getter
 public class Map {
     private static final Map instance = new Map();
 
@@ -35,7 +37,7 @@ public class Map {
                         Math.random() * width,
                         Math.random() * height
                 ),
-                1 + (int) (Math.random() * 10)
+                1 + (int) Math.floor(Math.random() * 100)
         ));
     }
 

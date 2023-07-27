@@ -17,8 +17,6 @@ class Map {
             }
             this.players[i].updateLength();
         }
-
-
     }
 
     draw(ctx) {
@@ -26,9 +24,9 @@ class Map {
         let i;
         for (i = 0; i < this.players.length; i++) {
             for (let j = 0; j < this.players[i].body.length; j++) {
-                this.drawCircle(ctx, this.players[i].body[j].x, this.players[i].body[j].y, 8, "pink");
+                this.drawCircle(ctx, this.players[i].body[j].x, this.players[i].body[j].y, 8, this.players[i].getColor()[1]);
             }
-            this.drawCircle(ctx, this.players[i].head.x, this.players[i].head.y, 10, "red");
+            this.drawCircle(ctx, this.players[i].head.x, this.players[i].head.y, 10, this.players[i].getColor()[0]);
         }
         for (i = 0; i < this.balls.length; i++) {
             this.drawCircle(ctx, this.balls[i].coord.x, this.balls[i].coord.y, 5, "green");

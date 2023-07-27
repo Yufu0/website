@@ -1,4 +1,4 @@
-package com.celio.chat.message;
+package com.celio.app.message;
 
 import lombok.*;
 @Getter

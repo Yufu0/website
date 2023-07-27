@@ -1,9 +1,9 @@
-package com.celio.chat.message;
+package com.celio.app.message;
 
 public enum MessageType {
     CHAT,
     JOIN,
     LEAVE,
-    DIRECTION,
+    POSITION,
     UPDATE,
 }

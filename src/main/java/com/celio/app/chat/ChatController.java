@@ -1,6 +1,6 @@
-package com.celio.chat.chat;
+package com.celio.app.chat;
 
-import com.celio.chat.message.Message;
+import com.celio.app.message.Message;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;

@@ -1,4 +1,4 @@
-package com.celio.chat.snake.game;
+package com.celio.app.snake.game;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class Player {
 
     public Player(String name, Map map) {
         this.name = name;
-        this.score = 1;
+        this.score = 100;
         this.head = map.randomCoord();
         this.direction = new Coord(0, 0);
         this.body = List.of(head);

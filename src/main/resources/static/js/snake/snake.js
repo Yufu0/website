@@ -2,6 +2,7 @@ let stompClient = null;
 let timeStamp = 0;
 let oldTimeStamp = 0;
 let oldTimeStampMouse = 0;
+let username = null;
 
 let posMouse = {x: 0, y: 0};
 
@@ -36,13 +37,13 @@ function gameLoop(timeStamp) {
         }
     });
     if (player) {
-        if (msPassed > 33) {
+        if (msPassed > 50) {
             oldTimeStamp = timeStamp;
-            player.directionTowards({x: posMouse.x, y: posMouse.y});
+            player.directionTowards(msPassed);
             map.update(msPassed);
             map.draw(ctx);
         }
-        if (msPassedMouse > 100) {
+        if (msPassedMouse > 250) {
             oldTimeStampMouse = timeStamp;
             sendPosition(player);
         }
@@ -73,14 +74,15 @@ function sendPosition(player) {
             sender: username,
             content: JSON.stringify(
                 {
-                    direction: {x: posMouse.x, y: posMouse.y},
+                    towards: {x: posMouse.x, y: posMouse.y},
+                    direction: player.direction,
                     head: player.head,
                     body: player.body,
                     score: player.score
                 }),
-            type: 'DIRECTION'
+            type: 'POSITION'
         };
-        stompClient.send("/app/snake.changeDirection", {}, JSON.stringify(message));
+        stompClient.send("/app/snake.changePosition", {}, JSON.stringify(message));
     }
 }
 
@@ -95,13 +97,13 @@ function onReceived(payload) {
 
     if (message.type === 'JOIN') {
     } else if (message.type === 'LEAVE') {
-    } else if (message.type === 'DIRECTION') {
-        name = message.sender;
-        data = JSON.parse(message.content);
+    } else if (message.type === 'POSITION') {
+        let name = message.sender;
+        let data = JSON.parse(message.content);
         for (let i = 0; i < map.players.length; i++) {
             if (map.players[i].name === name) {
-                map.players[i].directionTowards(data.direction);
-
+                map.players[i].changeTowards(new Coord(data.towards.x, data.towards.y));
+                map.players[i].changeDirection(new Coord(data.direction.x, data.direction.y));
                 map.players[i].head = new Coord(data.head.x, data.head.y);
                 map.players[i].body = [];
                 data.body.forEach(c => {
@@ -112,7 +114,6 @@ function onReceived(payload) {
         }
     } else if (message.type === 'UPDATE') {
         let updatedMap = JSON.parse(message.content);
-        console.log(updatedMap);
 
         map.width = updatedMap.width;
         map.height = updatedMap.height;
