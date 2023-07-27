@@ -1,14 +1,12 @@
 const colors = [
     ['#596cf5', '#bdc4fb'],
-    ['#dc143c', '#f69cae'],
-    ['#ff8c00', '#ffc58f'],
-    ['#ffd700', '#fff1a8'],
-    ['#00ced1', '#aeeeee'],
+    ['#ff0000', '#ff7b7b'],
+    ['#ff8c00', '#ffd8b1'],
     ['#00ff00', '#9aff9a'],
+    ['#00ffff', '#b0e2ff'],
+    ['#ffd700', '#fff1a8'],
     ['#ff00ff', '#ffbbff'],
-    ['#ff4500', '#ffbb99'],
-    ['#00ff7f', '#99ffbb'],
-    ['#ff69b4', '#ffb6c1'],
+    ['#0000ff', '#a8c6ff']
 ];
 
 class Player {
