@@ -7,7 +7,10 @@ class Map {
     }
 
     update(msPassed) {
+        console.log("bbbbbbbbbbbbbbbb");
         for (let i = 0; i < this.players.length; i++) {
+            console.log("ccccccccccccccccc")
+            this.players[i].directionTowards(msPassed);
             this.players[i].move(msPassed, this);
             for (let j = 0; j < this.balls.length; j++) {
                 if (this.players[i].head.touch(this.balls[j].coord)) {

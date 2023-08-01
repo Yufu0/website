@@ -29,25 +29,22 @@ function init() {
 function gameLoop(timeStamp) {
     // Calculate the number of milliseconds passed since the last frame
     let msPassed = (timeStamp - oldTimeStamp);
+    if (msPassed > 50) {
+        console.log("aaaaaaaaaaaaaaaa");
+        map.update(msPassed);
+        map.draw(ctx);
+        oldTimeStamp = timeStamp;
+    }
+
     let msPassedMouse = (timeStamp - oldTimeStampMouse);
-    let player;
     map.players.forEach(p => {
         if (p.name === username) {
-            player = p;
+            if (msPassedMouse > 250) {
+                oldTimeStampMouse = timeStamp;
+                sendPosition(p);
+            }
         }
     });
-    if (player) {
-        if (msPassed > 50) {
-            oldTimeStamp = timeStamp;
-            player.directionTowards(msPassed);
-            map.update(msPassed);
-            map.draw(ctx);
-        }
-        if (msPassedMouse > 250) {
-            oldTimeStampMouse = timeStamp;
-            sendPosition(player);
-        }
-    }
     window.requestAnimationFrame(gameLoop);
 }
 
@@ -102,8 +99,12 @@ function onReceived(payload) {
         let data = JSON.parse(message.content);
         for (let i = 0; i < map.players.length; i++) {
             if (map.players[i].name === name) {
-                map.players[i].changeTowards(new Coord(data.towards.x, data.towards.y));
-                map.players[i].changeDirection(new Coord(data.direction.x, data.direction.y));
+                let newTowards = new Coord(data.towards.x, data.towards.y);
+                let newDirection = new Coord(data.direction.x, data.direction.y);
+                if (!map.players[i].towards.equals(newTowards)) {
+                    map.players[i].changeTowards(newTowards);
+                    map.players[i].changeDirection(newDirection);
+                }
                 map.players[i].head = new Coord(data.head.x, data.head.y);
                 map.players[i].body = [];
                 data.body.forEach(c => {

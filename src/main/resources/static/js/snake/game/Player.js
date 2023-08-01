@@ -61,16 +61,17 @@ class Player {
 
         let angle1 = Math.atan2(this.direction.y, this.direction.x);
         let angle2 = Math.atan2(dy, dx);
-       if (angle1 - angle2 > Math.PI)
-           angle2 += 2 * Math.PI;
-         if (angle2 - angle1 > Math.PI)
-              angle1 += 2 * Math.PI;
+        if (angle1 - angle2 > Math.PI)
+            angle2 += 2 * Math.PI;
+        if (angle2 - angle1 > Math.PI)
+            angle1 += 2 * Math.PI;
         let angle = (1 - msPassed / 500) * angle1 + (msPassed / 500) * angle2;
 
         this.direction = new Coord(
             Math.cos(angle),
             Math.sin(angle)
         );
+        console.log(this.direction);
     }
 
     getColor() {
