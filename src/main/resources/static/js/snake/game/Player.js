@@ -18,15 +18,41 @@ class Player {
         this.body = [head];
         this.score = score;
         this.speed = 50;
+        this.oldTimeMove = null;
+        this.oldTimeTurn = null;
     }
 
-    move(msPassed, map) {
-        this.body.unshift(this.head);
-        this.body.pop();
+    move(timeStamp, map) {
+        if (!this.oldTimeMove) {
+            this.oldTimeMove = timeStamp;
+            return;
+        }
+        if (!timeStamp)
+            return;
+
+        let msPassed = timeStamp - this.oldTimeMove;
         let dx = msPassed * this.speed / 1000 * this.direction.x;
         let dy = msPassed * this.speed / 1000 * this.direction.y;
-        if ((this.head.x + dx) > 0 && (this.head.x + dx) < map.width && (this.head.y + dy) > 0 && (this.head.y + dy) < map.height)
-            this.head = new Coord((this.head.x + dx), (this.head.y + dy));
+
+        let newHead = new Coord((this.head.x + dx), (this.head.y + dy));
+
+        if (newHead.x < 0)
+            newHead.x = 0;
+        if (newHead.x > map.width)
+            newHead.x = map.width;
+        if (newHead.y < 0)
+            newHead.y = 0;
+        if (newHead.y > map.height)
+            newHead.y = map.height;
+
+        if (newHead.touch(this.head, 10)) {
+            return;
+        }
+        this.oldTimeMove = timeStamp;
+
+        this.body.unshift(this.head);
+        this.body.pop();
+        this.head = newHead;
     }
 
     eat(ball) {
@@ -51,11 +77,19 @@ class Player {
     changeTowards(towards) {
         this.towards = towards;
     }
-    directionTowards(msPassed) {
-        if (!msPassed)
+
+    turn(timeStamp) {
+        if (!this.oldTimeTurn) {
+            this.oldTimeTurn = timeStamp;
+            return;
+        }
+        if (!timeStamp)
             return;
         if (this.head.touch(this.towards))
             return;
+        let msPassed = timeStamp - this.oldTimeTurn;
+        this.oldTimeTurn = timeStamp;
+
         let dx = this.towards.x - this.head.x;
         let dy = this.towards.y - this.head.y;
 
@@ -71,15 +105,14 @@ class Player {
             Math.cos(angle),
             Math.sin(angle)
         );
-        console.log(this.direction);
     }
 
     getColor() {
-        var hash = 0;
-        for (var i = 0; i < this.name.length; i++) {
+        let hash = 0;
+        for (let i = 0; i < this.name.length; i++) {
             hash = 31 * hash + this.name.charCodeAt(i);
         }
-        var index = Math.abs(hash % colors.length);
+        let index = Math.abs(hash % colors.length);
         return colors[index];
     }
 }

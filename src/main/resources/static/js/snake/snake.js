@@ -1,6 +1,6 @@
 let stompClient = null;
-let oldTimeStamp = 0;
-let oldTimeStampMouse = 0;
+let oldTimeFrame = 0;
+let oldTimeMouse = 0;
 let username = null;
 
 let posMouse = {x: 0, y: 0};
@@ -21,24 +21,29 @@ function init() {
     $("#myCanvas").on("mousemove", event => {
         posMouse.x = event.pageX;
         posMouse.y = event.pageY;
+        map.players.forEach(p => {
+            if (p.name === username) {
+                    p.changeTowards(new Coord(posMouse.x, posMouse.y));
+                }
+            });
     })
     window.requestAnimationFrame(gameLoop);
 }
 
 function gameLoop(timeStamp) {
     // Calculate the number of milliseconds passed since the last frame
-    let msPassed = (timeStamp - oldTimeStamp);
-    if (msPassed > 50) {
-        map.update(msPassed);
+    let msFrame = (timeStamp - oldTimeFrame);
+    if (msFrame > 50) {
+        map.update(timeStamp);
         map.draw(ctx);
-        oldTimeStamp = timeStamp;
+        oldTimeFrame = timeStamp;
     }
 
-    let msPassedMouse = (timeStamp - oldTimeStampMouse);
+    let msPassedMouse = (timeStamp - oldTimeMouse);
     map.players.forEach(p => {
         if (p.name === username) {
-            if (msPassedMouse > 250) {
-                oldTimeStampMouse = timeStamp;
+            if (msPassedMouse > 150) {
+                oldTimeMouse = timeStamp;
                 sendPosition(p);
             }
         }

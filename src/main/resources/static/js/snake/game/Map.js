@@ -6,12 +6,10 @@ class Map {
         this.balls = [];
     }
 
-    update(msPassed) {
-        console.log("bbbbbbbbbbbbbbbb");
+    update(timeStamp) {
         for (let i = 0; i < this.players.length; i++) {
-            console.log("ccccccccccccccccc")
-            this.players[i].directionTowards(msPassed);
-            this.players[i].move(msPassed, this);
+            this.players[i].turn(timeStamp);
+            this.players[i].move(timeStamp, this);
             for (let j = 0; j < this.balls.length; j++) {
                 if (this.players[i].head.touch(this.balls[j].coord)) {
                     this.players[i].eat(this.balls[j]);
@@ -25,15 +23,16 @@ class Map {
     draw(ctx) {
         ctx.clearRect(0, 0, this.width, this.height);
         let i;
+        for (i = 0; i < this.balls.length; i++) {
+            this.drawCircle(ctx, this.balls[i].coord.x, this.balls[i].coord.y, 5, "green");
+        }
         for (i = 0; i < this.players.length; i++) {
             for (let j = 0; j < this.players[i].body.length; j++) {
                 this.drawCircle(ctx, this.players[i].body[j].x, this.players[i].body[j].y, 8, this.players[i].getColor()[1]);
             }
             this.drawCircle(ctx, this.players[i].head.x, this.players[i].head.y, 10, this.players[i].getColor()[0]);
         }
-        for (i = 0; i < this.balls.length; i++) {
-            this.drawCircle(ctx, this.balls[i].coord.x, this.balls[i].coord.y, 5, "green");
-        }
+
     }
 
     drawCircle(ctx, x, y, r, color) {
