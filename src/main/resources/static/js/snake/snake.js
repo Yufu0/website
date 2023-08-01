@@ -1,5 +1,4 @@
 let stompClient = null;
-let timeStamp = 0;
 let oldTimeStamp = 0;
 let oldTimeStampMouse = 0;
 let username = null;
@@ -94,22 +93,24 @@ function onReceived(payload) {
     if (message.type === 'JOIN') {
     } else if (message.type === 'LEAVE') {
     } else if (message.type === 'POSITION') {
-        let name = message.sender;
-        let data = JSON.parse(message.content);
-        for (let i = 0; i < map.players.length; i++) {
-            if (map.players[i].name === name) {
-                let newTowards = new Coord(data.towards.x, data.towards.y);
-                let newDirection = new Coord(data.direction.x, data.direction.y);
-                if (!map.players[i].towards.equals(newTowards)) {
-                    map.players[i].changeTowards(newTowards);
-                    map.players[i].changeDirection(newDirection);
+        if (message.sender !== username) {
+            let name = message.sender;
+            let data = JSON.parse(message.content);
+            for (let i = 0; i < map.players.length; i++) {
+                if (map.players[i].name === name) {
+                    let newTowards = new Coord(data.towards.x, data.towards.y);
+                    let newDirection = new Coord(data.direction.x, data.direction.y);
+                    if (!map.players[i].towards.equals(newTowards)) {
+                        map.players[i].changeTowards(newTowards);
+                        map.players[i].changeDirection(newDirection);
+                    }
+                    map.players[i].head = new Coord(data.head.x, data.head.y);
+                    map.players[i].body = [];
+                    data.body.forEach(c => {
+                        map.players[i].body.push(new Coord(c.x, c.y));
+                    });
+                    map.players[i].score = data.score;
                 }
-                map.players[i].head = new Coord(data.head.x, data.head.y);
-                map.players[i].body = [];
-                data.body.forEach(c => {
-                    map.players[i].body.push(new Coord(c.x, c.y));
-                });
-                map.players[i].score = data.score;
             }
         }
     } else if (message.type === 'UPDATE') {

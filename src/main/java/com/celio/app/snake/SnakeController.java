@@ -23,37 +23,6 @@ public class SnakeController {
     public Message changePosition(
             @Payload Message message
     ) {
-        /*
-        // change direction of player
-        JSONParser jsonParser = new JSONParser();
-        try {
-            JSONObject jsonPlayer = (JSONObject) jsonParser.parse(message.getContent());
-            System.out.println(jsonPlayer);
-            JSONObject jsonDirection = (JSONObject) jsonPlayer.get("direction");
-            JSONObject jsonHead = (JSONObject) jsonPlayer.get("head");
-            JSONArray jsonBody = (JSONArray)  jsonPlayer.get("body");
-
-            Map.getInstance().changePlayer(
-                    message.getSender(),
-                    new Coord(
-                            Double.valueOf((Long) jsonDirection.get("x")),
-                            Double.valueOf((Long) jsonDirection.get("y"))
-                    ),
-                    new Coord(
-                            (double) jsonHead.get("x"),
-                            (double) jsonHead.get("y")
-                    ),
-                    (List<Coord>) jsonBody.stream().map(o -> {
-                        JSONObject jsonCoord = (JSONObject) o;
-                        return new Coord(
-                                (double) jsonCoord.get("x"),
-                                (double) jsonCoord.get("y")
-                        );
-                    }).collect(Collectors.toList())
-            );
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }*/
         return message;
     }
 
