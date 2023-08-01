@@ -30,7 +30,6 @@ function gameLoop(timeStamp) {
     // Calculate the number of milliseconds passed since the last frame
     let msPassed = (timeStamp - oldTimeStamp);
     if (msPassed > 50) {
-        console.log("aaaaaaaaaaaaaaaa");
         map.update(msPassed);
         map.draw(ctx);
         oldTimeStamp = timeStamp;
