@@ -2,24 +2,14 @@ package com.celio.app.snake;
 
 import com.celio.app.message.Message;
 import com.celio.app.message.MessageType;
-import com.celio.app.snake.game.Ball;
-import com.celio.app.snake.game.Coord;
 import com.celio.app.snake.game.Map;
 import com.celio.app.snake.game.Player;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
-import org.json.simple.parser.ParseException;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class SnakeController {

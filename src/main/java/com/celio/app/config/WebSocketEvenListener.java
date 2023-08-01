@@ -32,7 +32,7 @@ public class WebSocketEvenListener {
                     .type(MessageType.LEAVE)
                     .sender(username)
                     .build();
-            messagingTemplate.convertAndSend("/message/chat/public", message);
+            messagingTemplate.convertAndSend("/chat/public", message);
 
         }
     }
