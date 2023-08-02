@@ -124,8 +124,11 @@ function onReceived(payload) {
         map.width = updatedMap.width;
         map.height = updatedMap.height;
 
-        map.players = [];
         updatedMap.players.forEach(player => {
+            if (map.listPlayers().includes(player.name)) {
+                return;
+
+            }
             map.players.push(new Player(player.name, new Coord(player.head.x, player.head.y), player.score));
         });
         map.balls = [];

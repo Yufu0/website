@@ -43,4 +43,12 @@ class Map {
         ctx.fill();
         ctx.stroke();
     }
+
+    listPlayers() {
+        let list = [];
+        for (let i = 0; i < this.players.length; i++) {
+            list.push(this.players[i].name);
+        }
+        return list;
+    }
 }
